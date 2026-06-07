@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": false,
   "description": "Multi-provider Agent Driver runtime for sandbox-hosted agent sessions.",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "bin": {
     "agent-driver": "./dist/driver.mjs"
   },

@@ -1,0 +1,10 @@
+{
+  "commandId": "command-1",
+  "input": {
+    "attachmentIds": ["file-1"],
+    "text": "hello"
+  },
+  "kind": "input.start",
+  "requestId": "request-1",
+  "runId": "run-1"
+}

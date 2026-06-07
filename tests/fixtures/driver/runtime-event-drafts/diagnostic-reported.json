@@ -1,0 +1,8 @@
+{
+  "kind": "diagnostic.reported",
+  "payload": {
+    "code": "driver.mcp_execute_failed",
+    "message": "Remote MCP execute failed.",
+    "severity": "error"
+  }
+}

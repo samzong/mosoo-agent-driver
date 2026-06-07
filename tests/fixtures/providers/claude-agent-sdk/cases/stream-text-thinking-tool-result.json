@@ -1,0 +1,224 @@
+{
+  "runId": "run-1",
+  "messages": [
+    {
+      "event": {
+        "delta": {
+          "text": "hello",
+          "type": "text_delta"
+        },
+        "type": "content_block_delta"
+      },
+      "type": "stream_event"
+    },
+    {
+      "event": {
+        "delta": {
+          "thinking": "consider",
+          "type": "thinking_delta"
+        },
+        "type": "content_block_delta"
+      },
+      "type": "stream_event"
+    },
+    {
+      "event": {
+        "content_block": {
+          "id": "tool-1",
+          "input": {
+            "command": "pwd"
+          },
+          "name": "Bash",
+          "type": "tool_use"
+        },
+        "index": 1,
+        "type": "content_block_start"
+      },
+      "type": "stream_event"
+    },
+    {
+      "event": {
+        "delta": {
+          "partial_json": "{\"cwd\":\"/workspace\"}",
+          "type": "input_json_delta"
+        },
+        "index": 1,
+        "type": "content_block_delta"
+      },
+      "type": "stream_event"
+    },
+    {
+      "event": {
+        "index": 1,
+        "type": "content_block_stop"
+      },
+      "type": "stream_event"
+    },
+    {
+      "type": "user",
+      "message": {
+        "content": [
+          {
+            "content": [
+              {
+                "text": "/workspace",
+                "type": "text"
+              }
+            ],
+            "tool_use_id": "tool-1",
+            "type": "tool_result"
+          }
+        ]
+      }
+    },
+    {
+      "event": {
+        "type": "message_stop"
+      },
+      "type": "stream_event"
+    },
+    {
+      "subtype": "success",
+      "total_cost_usd": 0.02,
+      "type": "result",
+      "usage": {
+        "input_tokens": 3,
+        "output_tokens": 5
+      }
+    }
+  ],
+  "expectedEvents": [
+    {
+      "kind": "message.started",
+      "payload": {
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "message.delta",
+      "payload": {
+        "contentDelta": "hello",
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "kind": "thought.started",
+      "payload": {
+        "channel": "summary",
+        "thoughtId": "<driver-id>:thought"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "thought.delta",
+      "payload": {
+        "channel": "summary",
+        "contentDelta": "consider",
+        "thoughtId": "<driver-id>:thought"
+      }
+    },
+    {
+      "kind": "item.started",
+      "payload": {
+        "itemId": "tool-1",
+        "itemType": "tool_call",
+        "parentMessageId": "<driver-id>",
+        "title": "Bash"
+      }
+    },
+    {
+      "kind": "tool.call.updated",
+      "payload": {
+        "kind": "tool",
+        "parentMessageId": "<driver-id>",
+        "status": "running",
+        "title": "Bash",
+        "toolCallId": "tool-1"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "tool.call.updated",
+      "payload": {
+        "rawInput": "{\"command\":\"pwd\"}",
+        "status": "running",
+        "toolCallId": "tool-1"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "tool.call.updated",
+      "payload": {
+        "rawInput": "{\"cwd\":\"/workspace\"}",
+        "status": "running",
+        "toolCallId": "tool-1"
+      }
+    },
+    {
+      "kind": "tool.call.updated",
+      "payload": {
+        "status": "completed",
+        "toolCallId": "tool-1"
+      }
+    },
+    {
+      "kind": "item.completed",
+      "payload": {
+        "itemId": "tool-1",
+        "itemType": "tool_call",
+        "status": "completed"
+      }
+    },
+    {
+      "kind": "tool.call.updated",
+      "payload": {
+        "content": "[{\"text\":\"/workspace\",\"type\":\"text\"}]",
+        "messageId": "<driver-id>",
+        "rawOutput": "[{\"text\":\"/workspace\",\"type\":\"text\"}]",
+        "status": "completed",
+        "toolCallId": "tool-1"
+      }
+    },
+    {
+      "kind": "thought.completed",
+      "payload": {
+        "channel": "summary",
+        "thoughtId": "<driver-id>:thought"
+      }
+    },
+    {
+      "kind": "message.completed",
+      "payload": {
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "kind": "usage.updated",
+      "payload": {
+        "cachedReadTokens": null,
+        "cachedWriteTokens": null,
+        "costAmount": 0.02,
+        "costCurrency": "USD",
+        "inputTokens": 3,
+        "outputTokens": 5,
+        "size": null,
+        "source": "session_update",
+        "thoughtTokens": null,
+        "totalTokens": 8,
+        "usageContract": "anthropic_bucketed",
+        "used": null
+      }
+    },
+    {
+      "kind": "run.completed",
+      "payload": {
+        "stopReason": "end_turn"
+      },
+      "runId": "run-1"
+    }
+  ]
+}

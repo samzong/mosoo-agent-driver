@@ -1,0 +1,63 @@
+{
+  "runId": "run-1",
+  "messages": [
+    {
+      "mcp_servers": [
+        {
+          "name": "fs"
+        }
+      ],
+      "model": "claude-sonnet",
+      "session_id": "claude-session-1",
+      "subtype": "init",
+      "tools": [
+        {
+          "name": "Bash"
+        }
+      ],
+      "type": "system"
+    },
+    {
+      "failed": ["src/b.ts"],
+      "files": [
+        {
+          "filename": "src/a.ts"
+        }
+      ],
+      "subtype": "files_persisted",
+      "type": "system"
+    }
+  ],
+  "expectedNativeSessionIds": ["claude-session-1", "claude-session-1"],
+  "expectedEvents": [
+    {
+      "kind": "session.info.updated",
+      "payload": {
+        "updatedAt": "<iso-timestamp>"
+      }
+    },
+    {
+      "actor": "tool",
+      "kind": "file.change.updated",
+      "origin": "file",
+      "payload": {
+        "changes": [
+          {
+            "change": "upsert",
+            "path": "src/a.ts"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "kind": "diagnostic.reported",
+      "payload": {
+        "failed": ["src/b.ts"],
+        "message": "Claude file persistence failed.",
+        "severity": "warn"
+      },
+      "visibility": "owner_debug"
+    }
+  ]
+}

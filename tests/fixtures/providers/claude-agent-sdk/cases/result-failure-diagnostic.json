@@ -1,0 +1,63 @@
+{
+  "runId": "run-1",
+  "messages": [
+    {
+      "session_id": "claude-session-2",
+      "subtype": "warning",
+      "type": "rate_limit_event"
+    },
+    {
+      "errors": ["too many turns"],
+      "subtype": "error_max_turns",
+      "total_cost_usd": null,
+      "type": "result",
+      "usage": {
+        "input_tokens": 1
+      }
+    }
+  ],
+  "expectedNativeSessionIds": ["claude-session-2"],
+  "expectedEvents": [
+    {
+      "kind": "diagnostic.reported",
+      "payload": {
+        "message": "driver.claude.diagnostic",
+        "raw": {
+          "kind": "claude.diagnostic",
+          "sessionIdPresent": true,
+          "subtype": "warning",
+          "type": "rate_limit_event"
+        },
+        "severity": "info"
+      },
+      "visibility": "owner_debug"
+    },
+    {
+      "kind": "usage.updated",
+      "payload": {
+        "cachedReadTokens": null,
+        "cachedWriteTokens": null,
+        "costAmount": null,
+        "costCurrency": null,
+        "inputTokens": 1,
+        "outputTokens": null,
+        "size": null,
+        "source": "session_update",
+        "thoughtTokens": null,
+        "totalTokens": 1,
+        "usageContract": "anthropic_bucketed",
+        "used": null
+      }
+    },
+    {
+      "kind": "run.failed",
+      "payload": {
+        "error": {
+          "code": "claude.error_max_turns",
+          "message": "too many turns"
+        },
+        "recoverable": false
+      }
+    }
+  ]
+}

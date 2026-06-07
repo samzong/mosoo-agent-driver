@@ -1,0 +1,8 @@
+{
+  "argumentsJson": "{\"ok\":true}",
+  "commandId": "command-mcp-1",
+  "kind": "mcp.execute",
+  "requestId": "request-1",
+  "serverId": "server-1",
+  "toolName": "complete"
+}

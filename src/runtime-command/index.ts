@@ -1,0 +1,318 @@
+export type PrimitiveValue = string | number | boolean | null;
+export type PrimitiveRecord = Record<string, PrimitiveValue>;
+
+export interface RunError {
+  readonly code: string;
+  readonly details: PrimitiveRecord;
+  readonly message: string;
+  readonly retryable: boolean;
+}
+
+export type RuntimeCommandStatus =
+  | "accepted"
+  | "cancelled"
+  | "completed"
+  | "delivered"
+  | "expired"
+  | "failed"
+  | "queued";
+
+export interface RuntimeCommandInput {
+  readonly attachmentIds?: string[] | undefined;
+  readonly text: string;
+}
+
+export interface DriverOrganizationAccessSnapshotEntry {
+  readonly mountPath: string;
+  readonly role: "admin" | "edit" | "read";
+  readonly spaceId: string;
+  readonly type: "space";
+}
+
+export interface DriverOrganizationAccessSnapshot {
+  readonly entries: DriverOrganizationAccessSnapshotEntry[];
+}
+
+export interface TurnCancelCommand {
+  readonly commandId: string;
+  readonly kind: "turn.cancel";
+  readonly reason?: string | undefined;
+}
+
+export interface InputStartCommand {
+  readonly commandId: string;
+  readonly input: RuntimeCommandInput;
+  readonly kind: "input.start";
+  readonly organizationAccessSnapshot?: DriverOrganizationAccessSnapshot | undefined;
+  readonly requestId: string;
+  readonly runId: string;
+}
+
+export interface SessionStopCommand {
+  readonly commandId: string;
+  readonly kind: "session.stop";
+  readonly reason: string;
+}
+
+export interface McpExecuteCommand {
+  readonly argumentsJson: string;
+  readonly commandId: string;
+  readonly kind: "mcp.execute";
+  readonly requestId: string;
+  readonly serverId: string;
+  readonly toolName: string;
+}
+
+export interface PermissionResolveCommand {
+  readonly commandId: string;
+  readonly decision: "allow_once" | "reject_once";
+  readonly kind: "permission.resolve";
+  readonly requestId: string;
+}
+
+export interface AccessRefreshCommand {
+  readonly commandId: string;
+  readonly kind: "access.refresh";
+  readonly organizationAccessSnapshot: DriverOrganizationAccessSnapshot;
+}
+
+export type RuntimeCommand =
+  | AccessRefreshCommand
+  | InputStartCommand
+  | McpExecuteCommand
+  | PermissionResolveCommand
+  | SessionStopCommand
+  | TurnCancelCommand;
+
+export interface InputStartCommandResult {
+  readonly requestId: string;
+}
+
+export interface McpExecuteCommandResult {
+  readonly outputText: string;
+  readonly requestId: string;
+  readonly serverId: string;
+  readonly toolName: string;
+}
+
+export interface AccessRefreshCommandResult {
+  readonly entryCount: number;
+}
+
+export type RuntimeCommandResult =
+  | AccessRefreshCommandResult
+  | InputStartCommandResult
+  | McpExecuteCommandResult
+  | null;
+
+export type DriverCapabilityId =
+  | "custom_tool_execute"
+  | "file_change"
+  | "input_start"
+  | "mcp_execute"
+  | "native_resume"
+  | "permission_request"
+  | "session_stop"
+  | "text_stream"
+  | "thinking_stream"
+  | "tool_stream"
+  | "turn_cancel"
+  | "usage"
+  | "visible_activity";
+
+export interface DriverCapability {
+  readonly details?: string | undefined;
+  readonly id: DriverCapabilityId;
+  readonly status: "supported" | "unsupported";
+  readonly version: 1;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function readRecord(value: unknown, label: string): Record<string, unknown> {
+  if (!isRecord(value)) {
+    throw new TypeError(`${label} must be an object.`);
+  }
+
+  return value;
+}
+
+function readNonEmptyString(record: Record<string, unknown>, field: string): string {
+  const value = record[field];
+
+  if (typeof value !== "string" || value.length === 0) {
+    throw new TypeError(`${field} must be a non-empty string.`);
+  }
+
+  return value;
+}
+
+function readString(record: Record<string, unknown>, field: string): string {
+  const value = record[field];
+
+  if (typeof value !== "string") {
+    throw new TypeError(`${field} must be a string.`);
+  }
+
+  return value;
+}
+
+function readOptionalString(record: Record<string, unknown>, field: string): string | undefined {
+  const value = record[field];
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (typeof value !== "string") {
+    throw new TypeError(`${field} must be a string.`);
+  }
+
+  return value;
+}
+
+function readStringArray(record: Record<string, unknown>, field: string): string[] | undefined {
+  const value = record[field];
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Array.isArray(value) || value.some((entry) => typeof entry !== "string")) {
+    throw new TypeError(`${field} must be an array of strings.`);
+  }
+
+  return [...value];
+}
+
+function readRuntimeCommandInput(value: unknown): RuntimeCommandInput {
+  const record = readRecord(value, "input");
+  const attachmentIds = readStringArray(record, "attachmentIds");
+
+  return {
+    ...(attachmentIds === undefined ? {} : { attachmentIds }),
+    text: readNonEmptyString(record, "text"),
+  };
+}
+
+function readAccessRole(value: unknown): DriverOrganizationAccessSnapshotEntry["role"] {
+  if (value === "admin" || value === "edit" || value === "read") {
+    return value;
+  }
+
+  throw new TypeError("organizationAccessSnapshot.entries[].role must be admin, edit, or read.");
+}
+
+function readOrganizationAccessSnapshotEntry(
+  value: unknown,
+): DriverOrganizationAccessSnapshotEntry {
+  const record = readRecord(value, "organizationAccessSnapshot.entries[]");
+  const type = readNonEmptyString(record, "type");
+
+  if (type !== "space") {
+    throw new TypeError("organizationAccessSnapshot.entries[].type must be space.");
+  }
+
+  return {
+    mountPath: readNonEmptyString(record, "mountPath"),
+    role: readAccessRole(record["role"]),
+    spaceId: readNonEmptyString(record, "spaceId"),
+    type,
+  };
+}
+
+function readOrganizationAccessSnapshot(value: unknown): DriverOrganizationAccessSnapshot {
+  const record = readRecord(value, "organizationAccessSnapshot");
+  const entries = record["entries"];
+
+  if (!Array.isArray(entries)) {
+    throw new TypeError("organizationAccessSnapshot.entries must be an array.");
+  }
+
+  return {
+    entries: entries.map(readOrganizationAccessSnapshotEntry),
+  };
+}
+
+function readOptionalOrganizationAccessSnapshot(
+  record: Record<string, unknown>,
+): DriverOrganizationAccessSnapshot | undefined {
+  const value = record["organizationAccessSnapshot"];
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  return readOrganizationAccessSnapshot(value);
+}
+
+function readPermissionDecision(value: unknown): PermissionResolveCommand["decision"] {
+  if (value === "allow_once" || value === "reject_once") {
+    return value;
+  }
+
+  throw new TypeError("decision must be allow_once or reject_once.");
+}
+
+export function parseRuntimeCommand(value: unknown): RuntimeCommand {
+  const record = readRecord(value, "runtime command");
+  const kind = readString(record, "kind");
+
+  switch (kind) {
+    case "access.refresh":
+      return {
+        commandId: readNonEmptyString(record, "commandId"),
+        kind,
+        organizationAccessSnapshot: readOrganizationAccessSnapshot(
+          record["organizationAccessSnapshot"],
+        ),
+      };
+    case "input.start": {
+      const organizationAccessSnapshot = readOptionalOrganizationAccessSnapshot(record);
+
+      return {
+        commandId: readNonEmptyString(record, "commandId"),
+        input: readRuntimeCommandInput(record["input"]),
+        kind,
+        ...(organizationAccessSnapshot === undefined ? {} : { organizationAccessSnapshot }),
+        requestId: readNonEmptyString(record, "requestId"),
+        runId: readNonEmptyString(record, "runId"),
+      };
+    }
+    case "mcp.execute":
+      return {
+        argumentsJson: readString(record, "argumentsJson"),
+        commandId: readNonEmptyString(record, "commandId"),
+        kind,
+        requestId: readNonEmptyString(record, "requestId"),
+        serverId: readNonEmptyString(record, "serverId"),
+        toolName: readNonEmptyString(record, "toolName"),
+      };
+    case "permission.resolve":
+      return {
+        commandId: readNonEmptyString(record, "commandId"),
+        decision: readPermissionDecision(record["decision"]),
+        kind,
+        requestId: readNonEmptyString(record, "requestId"),
+      };
+    case "session.stop":
+      return {
+        commandId: readNonEmptyString(record, "commandId"),
+        kind,
+        reason: readNonEmptyString(record, "reason"),
+      };
+    case "turn.cancel": {
+      const reason = readOptionalString(record, "reason");
+
+      return {
+        commandId: readNonEmptyString(record, "commandId"),
+        kind,
+        ...(reason === undefined ? {} : { reason }),
+      };
+    }
+    default:
+      throw new TypeError(`Unsupported runtime command kind: ${kind}.`);
+  }
+}

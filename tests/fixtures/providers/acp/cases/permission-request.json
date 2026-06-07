@@ -1,0 +1,109 @@
+{
+  "begin": {
+    "messageId": "message-1",
+    "runId": "run-1",
+    "sessionId": "session-1"
+  },
+  "permissionRequest": {
+    "params": {
+      "options": [
+        {
+          "kind": "allow_once",
+          "name": "Allow once",
+          "optionId": "allow"
+        },
+        {
+          "kind": "reject_once",
+          "name": "Reject once",
+          "optionId": "reject"
+        }
+      ],
+      "toolCall": {
+        "kind": "shell",
+        "rawInput": {
+          "command": "pwd"
+        },
+        "title": "Run command",
+        "toolCallId": "tool-1"
+      }
+    },
+    "requestId": "rpc-42"
+  },
+  "completePrompt": {
+    "stopReason": "end_turn",
+    "usage": null
+  },
+  "expectedEvents": [
+    {
+      "kind": "item.started",
+      "payload": {
+        "itemId": "tool-1",
+        "itemType": "tool_call",
+        "parentMessageId": "message-1",
+        "title": "Run command"
+      },
+      "runId": "run-1"
+    },
+    {
+      "kind": "tool.call.updated",
+      "payload": {
+        "kind": "shell",
+        "rawInput": {
+          "command": "pwd"
+        },
+        "status": "running",
+        "title": "Run command",
+        "toolCallId": "tool-1"
+      },
+      "runId": "run-1"
+    },
+    {
+      "kind": "permission.requested",
+      "payload": {
+        "defaultOptionId": "allow",
+        "details": "{\"command\":\"pwd\"}",
+        "options": [
+          {
+            "kind": "allow_once",
+            "name": "Allow once",
+            "optionId": "allow"
+          },
+          {
+            "kind": "reject_once",
+            "name": "Reject once",
+            "optionId": "reject"
+          }
+        ],
+        "requestId": "rpc-42",
+        "targetItemId": "tool-1",
+        "title": "Run command",
+        "toolCall": {
+          "kind": "shell",
+          "rawInput": {
+            "command": "pwd"
+          },
+          "status": "running",
+          "title": "Run command",
+          "toolCallId": "tool-1"
+        }
+      },
+      "runId": "run-1"
+    },
+    {
+      "kind": "item.completed",
+      "payload": {
+        "itemId": "tool-1",
+        "itemType": "tool_call",
+        "status": "completed"
+      },
+      "runId": "run-1"
+    },
+    {
+      "kind": "run.completed",
+      "payload": {
+        "stopReason": "end_turn"
+      },
+      "runId": "run-1"
+    }
+  ]
+}

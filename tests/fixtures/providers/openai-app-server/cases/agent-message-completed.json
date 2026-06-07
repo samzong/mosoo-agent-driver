@@ -1,0 +1,41 @@
+{
+  "notifications": [
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "id": "message-1",
+          "text": "pong",
+          "type": "agentMessage"
+        },
+        "threadId": "thread-1",
+        "turnId": "turn-1"
+      }
+    }
+  ],
+  "expectedEvents": [
+    {
+      "kind": "message.started",
+      "payload": {
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "message.delta",
+      "payload": {
+        "contentDelta": "pong",
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "kind": "message.completed",
+      "payload": {
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    }
+  ]
+}

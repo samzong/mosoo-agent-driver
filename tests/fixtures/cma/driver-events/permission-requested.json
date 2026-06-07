@@ -1,0 +1,13 @@
+{
+  "kind": "permission.requested",
+  "payload": {
+    "details": "{\"command\":\"vp test\"}",
+    "requestId": "permission-1",
+    "targetItemId": "tool-1",
+    "title": "Approve command",
+    "toolCall": {
+      "kind": "shell",
+      "toolCallId": "tool-1"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "begin": {
+    "messageId": "message-1",
+    "runId": "run-1",
+    "sessionId": "session-1"
+  },
+  "updates": [
+    {
+      "update": {
+        "content": {
+          "text": "plan",
+          "type": "text"
+        },
+        "sessionUpdate": "agent_thought_chunk"
+      }
+    },
+    {
+      "update": {
+        "sessionUpdate": "mystery_update",
+        "value": 123
+      }
+    }
+  ],
+  "completePrompt": {
+    "stopReason": "end_turn",
+    "usage": null
+  },
+  "expectedEvents": [
+    {
+      "kind": "thought.started",
+      "payload": {
+        "channel": "summary",
+        "thoughtId": "message-1:thought"
+      },
+      "runId": "run-1"
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "thought.delta",
+      "payload": {
+        "channel": "summary",
+        "contentBlock": {
+          "text": "plan",
+          "type": "text"
+        },
+        "contentDelta": "plan",
+        "thoughtId": "message-1:thought"
+      },
+      "runId": "run-1",
+      "sourceEventId": "acp:session-1:run-1:agent-thought:1"
+    },
+    {
+      "kind": "diagnostic.reported",
+      "payload": {
+        "message": "Unsupported ACP session update: mystery_update.",
+        "raw": {
+          "sessionUpdate": "mystery_update",
+          "value": 123
+        },
+        "severity": "info"
+      },
+      "visibility": "owner_debug"
+    },
+    {
+      "kind": "thought.completed",
+      "payload": {
+        "channel": "summary",
+        "thoughtId": "message-1:thought"
+      },
+      "runId": "run-1"
+    },
+    {
+      "kind": "run.completed",
+      "payload": {
+        "stopReason": "end_turn"
+      },
+      "runId": "run-1"
+    }
+  ]
+}

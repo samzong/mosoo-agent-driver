@@ -1,0 +1,42 @@
+{
+  "notifications": [
+    {
+      "method": "turn/plan/updated",
+      "params": {
+        "explanation": null,
+        "plan": [
+          {
+            "status": "inProgress",
+            "step": "Inspect stream events"
+          },
+          {
+            "status": "completed",
+            "step": "Patch bridge"
+          }
+        ],
+        "threadId": "thread-1",
+        "turnId": "turn-1"
+      }
+    }
+  ],
+  "expectedEvents": [
+    {
+      "kind": "plan.updated",
+      "payload": {
+        "entries": [
+          {
+            "content": "Inspect stream events",
+            "priority": "medium",
+            "status": "in_progress"
+          },
+          {
+            "content": "Patch bridge",
+            "priority": "medium",
+            "status": "completed"
+          }
+        ],
+        "source": "driver"
+      }
+    }
+  ]
+}

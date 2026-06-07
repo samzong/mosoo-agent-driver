@@ -1,0 +1,8 @@
+{
+  "kind": "message.delta",
+  "payload": {
+    "contentDelta": "hello",
+    "messageId": "message-1",
+    "role": "agent"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "config": {
+    "type": "self_hosted"
+  },
+  "id": "environment-1",
+  "name": "Main"
+}

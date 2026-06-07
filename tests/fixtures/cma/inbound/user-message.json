@@ -1,0 +1,8 @@
+{
+  "attachmentIds": ["file-1"],
+  "commandId": "command-1",
+  "requestId": "request-1",
+  "runId": "run-1",
+  "text": "hello",
+  "type": "user.message"
+}

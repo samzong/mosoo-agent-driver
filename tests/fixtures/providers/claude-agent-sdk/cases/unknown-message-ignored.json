@@ -1,0 +1,10 @@
+{
+  "runId": "run-1",
+  "messages": [
+    {
+      "type": "future_event",
+      "value": 123
+    }
+  ],
+  "expectedEvents": []
+}

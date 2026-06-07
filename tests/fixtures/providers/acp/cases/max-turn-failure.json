@@ -1,0 +1,66 @@
+{
+  "begin": {
+    "messageId": "message-1",
+    "runId": "run-1",
+    "sessionId": "session-1"
+  },
+  "updates": [
+    {
+      "update": {
+        "sessionUpdate": "tool_call",
+        "status": "running",
+        "title": "Run command",
+        "toolCallId": "tool-1"
+      }
+    }
+  ],
+  "completePrompt": {
+    "stopReason": "max_turn_requests",
+    "usage": null
+  },
+  "expectedEvents": [
+    {
+      "kind": "item.started",
+      "payload": {
+        "itemId": "tool-1",
+        "itemType": "tool_call",
+        "parentMessageId": "message-1",
+        "title": "Run command"
+      },
+      "runId": "run-1"
+    },
+    {
+      "kind": "tool.call.updated",
+      "payload": {
+        "kind": "tool",
+        "status": "running",
+        "title": "Run command",
+        "toolCallId": "tool-1"
+      },
+      "runId": "run-1",
+      "sourceEventId": "acp:session-1:run-1:tool-call:1"
+    },
+    {
+      "kind": "item.completed",
+      "payload": {
+        "error": "Turn failed after the maximum turn request limit.",
+        "itemId": "tool-1",
+        "itemType": "tool_call",
+        "status": "failed"
+      },
+      "runId": "run-1"
+    },
+    {
+      "kind": "run.failed",
+      "payload": {
+        "error": {
+          "code": "acp.max_turn_requests",
+          "message": "ACP prompt stopped after the maximum turn request limit."
+        },
+        "recoverable": false,
+        "stopReason": "max_turn_requests"
+      },
+      "runId": "run-1"
+    }
+  ]
+}

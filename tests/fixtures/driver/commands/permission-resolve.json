@@ -1,0 +1,6 @@
+{
+  "commandId": "command-permission-1",
+  "decision": "allow_once",
+  "kind": "permission.resolve",
+  "requestId": "permission-1"
+}

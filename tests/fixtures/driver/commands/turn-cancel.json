@@ -1,0 +1,5 @@
+{
+  "commandId": "command-cancel-1",
+  "kind": "turn.cancel",
+  "reason": "user"
+}

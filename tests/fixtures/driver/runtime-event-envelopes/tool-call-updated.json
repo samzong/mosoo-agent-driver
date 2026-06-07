@@ -1,0 +1,25 @@
+{
+  "actor": "driver",
+  "delivery": "lossless",
+  "driverInstanceId": "01J00000000000000000000008",
+  "id": "01J0000000000000000000000G",
+  "kind": "tool.call.updated",
+  "occurredAt": "2026-05-26T00:00:00.000Z",
+  "origin": "driver",
+  "payload": {
+    "content": "running command",
+    "kind": "shell",
+    "messageId": "message-1",
+    "parentMessageId": "message-parent-1",
+    "rawInput": "{\"command\":\"pwd\"}",
+    "status": "running",
+    "title": "Run shell command",
+    "toolCallId": "tool-1"
+  },
+  "runId": "01J0000000000000000000000N",
+  "runtimeId": "runtime-1",
+  "schemaVersion": "2026-05-26",
+  "sessionId": "01J0000000000000000000000K",
+  "traceId": "trace-1",
+  "visibility": "participant"
+}

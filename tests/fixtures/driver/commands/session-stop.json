@@ -1,0 +1,5 @@
+{
+  "commandId": "command-stop-1",
+  "kind": "session.stop",
+  "reason": "shutdown"
+}

@@ -1,0 +1,12 @@
+{
+  "notifications": [
+    {
+      "method": "thread/customFutureEvent",
+      "params": {
+        "threadId": "thread-1",
+        "value": 123
+      }
+    }
+  ],
+  "expectedEvents": []
+}

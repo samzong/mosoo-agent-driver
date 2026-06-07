@@ -1,0 +1,13 @@
+{
+  "kind": "tool.call.updated",
+  "payload": {
+    "content": "running command",
+    "kind": "shell",
+    "messageId": "message-1",
+    "parentMessageId": "message-parent-1",
+    "rawInput": "{\"command\":\"pwd\"}",
+    "status": "running",
+    "title": "Run shell command",
+    "toolCallId": "tool-1"
+  }
+}

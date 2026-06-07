@@ -1,0 +1,81 @@
+{
+  "sessionReady": {
+    "mode": "created",
+    "nativeSessionId": "native-session-1",
+    "setup": {
+      "availableModes": [
+        {
+          "id": "default",
+          "name": "Default"
+        }
+      ],
+      "capabilities": {
+        "fileSystem": true
+      },
+      "configOptions": [
+        {
+          "id": "approval",
+          "type": "select"
+        }
+      ],
+      "currentModeId": "default",
+      "currentModel": "sonnet",
+      "models": ["sonnet"]
+    }
+  },
+  "expectedEvents": [
+    {
+      "kind": "session.created",
+      "payload": {
+        "mode": "acp",
+        "topology": "stdio"
+      }
+    },
+    {
+      "kind": "runtime.resume.updated",
+      "payload": {
+        "resumePointer": "native-session-1"
+      },
+      "visibility": "owner_debug"
+    },
+    {
+      "kind": "session.mode.updated",
+      "payload": {
+        "availableModes": [
+          {
+            "id": "default",
+            "name": "Default"
+          }
+        ],
+        "currentMode": "default"
+      }
+    },
+    {
+      "kind": "session.models.updated",
+      "payload": {
+        "availableModels": ["sonnet"],
+        "currentModel": "sonnet"
+      }
+    },
+    {
+      "kind": "session.config.updated",
+      "payload": {
+        "options": [
+          {
+            "id": "approval",
+            "type": "select"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "session.capabilities.updated",
+      "payload": {
+        "capabilities": {
+          "fileSystem": true
+        }
+      },
+      "visibility": "owner_debug"
+    }
+  ]
+}

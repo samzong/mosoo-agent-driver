@@ -1,0 +1,14 @@
+{
+  "commandId": "command-access-1",
+  "kind": "access.refresh",
+  "organizationAccessSnapshot": {
+    "entries": [
+      {
+        "mountPath": "/workspace",
+        "role": "read",
+        "spaceId": "space-1",
+        "type": "space"
+      }
+    ]
+  }
+}

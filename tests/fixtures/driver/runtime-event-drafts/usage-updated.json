@@ -1,0 +1,8 @@
+{
+  "kind": "usage.updated",
+  "payload": {
+    "inputTokens": 12,
+    "model": "model-1",
+    "outputTokens": 3
+  }
+}

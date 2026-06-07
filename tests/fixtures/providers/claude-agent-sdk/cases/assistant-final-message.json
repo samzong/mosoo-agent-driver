@@ -1,0 +1,92 @@
+{
+  "runId": "run-1",
+  "messages": [
+    {
+      "type": "assistant",
+      "message": {
+        "content": [
+          {
+            "text": "pong",
+            "type": "text"
+          },
+          {
+            "id": "tool-2",
+            "input": {
+              "file": "src/a.ts"
+            },
+            "name": "Read",
+            "type": "tool_use"
+          }
+        ]
+      }
+    }
+  ],
+  "expectedEvents": [
+    {
+      "kind": "message.started",
+      "payload": {
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "message.delta",
+      "payload": {
+        "contentDelta": "pong",
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "kind": "item.started",
+      "payload": {
+        "itemId": "tool-2",
+        "itemType": "tool_call",
+        "parentMessageId": "<driver-id>",
+        "title": "Read"
+      }
+    },
+    {
+      "kind": "tool.call.updated",
+      "payload": {
+        "kind": "tool",
+        "parentMessageId": "<driver-id>",
+        "status": "running",
+        "title": "Read",
+        "toolCallId": "tool-2"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "tool.call.updated",
+      "payload": {
+        "rawInput": "{\"file\":\"src/a.ts\"}",
+        "status": "running",
+        "toolCallId": "tool-2"
+      }
+    },
+    {
+      "kind": "tool.call.updated",
+      "payload": {
+        "status": "completed",
+        "toolCallId": "tool-2"
+      }
+    },
+    {
+      "kind": "item.completed",
+      "payload": {
+        "itemId": "tool-2",
+        "itemType": "tool_call",
+        "status": "completed"
+      }
+    },
+    {
+      "kind": "message.completed",
+      "payload": {
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    }
+  ]
+}

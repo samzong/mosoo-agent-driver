@@ -1,0 +1,21 @@
+{
+  "actor": "driver",
+  "delivery": "lossless",
+  "driverInstanceId": "01J00000000000000000000008",
+  "id": "01J0000000000000000000000G",
+  "kind": "run.started",
+  "occurredAt": "2026-05-26T00:00:00.000Z",
+  "origin": "driver",
+  "payload": {
+    "inputSummary": "hello",
+    "lifecycle": "RUNNING",
+    "startedAt": "2026-05-26T00:00:00.000Z",
+    "status": "running"
+  },
+  "runId": "01J0000000000000000000000N",
+  "runtimeId": "runtime-1",
+  "schemaVersion": "2026-05-26",
+  "sessionId": "01J0000000000000000000000K",
+  "traceId": "trace-1",
+  "visibility": "participant"
+}

@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "CMA_CAPABILITY_GAP",
+    "feature": "environment.config.self_hosted",
+    "message": "CMA capability is not supported in v0: environment.config.self_hosted."
+  }
+}

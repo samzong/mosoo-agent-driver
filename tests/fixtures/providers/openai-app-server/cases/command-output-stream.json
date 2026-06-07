@@ -1,0 +1,83 @@
+{
+  "notifications": [
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "id": "cmd-1",
+          "type": "commandExecution"
+        },
+        "threadId": "thread-1",
+        "turnId": "turn-1"
+      }
+    },
+    {
+      "method": "item/commandExecution/outputDelta",
+      "params": {
+        "delta": "hello",
+        "itemId": "cmd-1",
+        "threadId": "thread-1",
+        "turnId": "turn-1"
+      }
+    },
+    {
+      "method": "item/commandExecution/outputDelta",
+      "params": {
+        "delta": " world",
+        "itemId": "cmd-1",
+        "threadId": "thread-1",
+        "turnId": "turn-1"
+      }
+    }
+  ],
+  "expectedEvents": [
+    {
+      "kind": "message.started",
+      "payload": {
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "kind": "item.started",
+      "payload": {
+        "itemId": "cmd-1",
+        "itemType": "tool_call",
+        "parentMessageId": "<driver-id>",
+        "title": "Shell"
+      }
+    },
+    {
+      "kind": "tool.call.updated",
+      "payload": {
+        "kind": "tool",
+        "parentMessageId": "<driver-id>",
+        "status": "running",
+        "title": "Shell",
+        "toolCallId": "cmd-1"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "tool.call.updated",
+      "payload": {
+        "content": "hello",
+        "messageId": "<driver-id>",
+        "rawOutput": "hello",
+        "status": "completed",
+        "toolCallId": "cmd-1"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "tool.call.updated",
+      "payload": {
+        "content": " world",
+        "messageId": "<driver-id>",
+        "rawOutput": " world",
+        "status": "completed",
+        "toolCallId": "cmd-1"
+      }
+    }
+  ]
+}

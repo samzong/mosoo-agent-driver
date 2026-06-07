@@ -1,0 +1,74 @@
+{
+  "notifications": [
+    {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "thread-1",
+        "turn": {
+          "id": "turn-1",
+          "items": [
+            {
+              "id": "message-1",
+              "text": "pong",
+              "type": "agentMessage"
+            }
+          ],
+          "status": "completed"
+        }
+      }
+    }
+  ],
+  "trackTurnAfterNotifications": {
+    "expectation": "resolve",
+    "turnId": "turn-1"
+  },
+  "expectedEvents": [
+    {
+      "kind": "run.started",
+      "native": {
+        "eventName": "turn.started",
+        "provider": "openai",
+        "turnId": "turn-1"
+      },
+      "payload": {
+        "startedAt": "<iso-timestamp>"
+      },
+      "sourceEventId": "openai.turn.started:turn-1"
+    },
+    {
+      "kind": "message.started",
+      "payload": {
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "delivery": "best_effort",
+      "kind": "message.delta",
+      "payload": {
+        "contentDelta": "pong",
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "kind": "message.completed",
+      "payload": {
+        "messageId": "<driver-id>",
+        "role": "agent"
+      }
+    },
+    {
+      "kind": "run.completed",
+      "native": {
+        "eventName": "turn.completed",
+        "provider": "openai",
+        "turnId": "turn-1"
+      },
+      "payload": {
+        "stopReason": "end_turn"
+      },
+      "sourceEventId": "openai.turn.completed:turn-1"
+    }
+  ]
+}

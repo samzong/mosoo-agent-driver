@@ -1,0 +1,87 @@
+{
+  "name": "agent-driver",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Multi-provider Agent Driver runtime for sandbox-hosted agent sessions.",
+  "license": "UNLICENSED",
+  "bin": {
+    "agent-driver": "./dist/driver.mjs"
+  },
+  "files": [
+    "dist",
+    "src",
+    "tests/fixtures",
+    "Dockerfile",
+    ".dockerignore",
+    "README.md"
+  ],
+  "type": "module",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./bin/driver": {
+      "types": "./dist/types/bin/driver.d.ts",
+      "default": "./src/bin/driver.ts"
+    },
+    "./boot": {
+      "types": "./dist/types/boot.d.ts",
+      "default": "./src/boot.ts"
+    },
+    "./runtime": {
+      "types": "./dist/types/runtime.d.ts",
+      "default": "./src/runtime.ts"
+    },
+    "./paths": {
+      "types": "./dist/types/paths.d.ts",
+      "default": "./src/paths.ts"
+    },
+    "./events": {
+      "types": "./dist/types/events.d.ts",
+      "default": "./src/events.ts"
+    },
+    "./orpc": {
+      "types": "./dist/types/orpc.d.ts",
+      "default": "./src/orpc.ts"
+    },
+    "./cma-http": {
+      "types": "./dist/types/cma-http.d.ts",
+      "default": "./src/cma-http.ts"
+    },
+    "./cma-sdk": {
+      "types": "./dist/types/cma-sdk.d.ts",
+      "default": "./src/cma-sdk.ts"
+    },
+    "./testing": {
+      "types": "./dist/types/testing.d.ts",
+      "default": "./src/testing.ts"
+    }
+  },
+  "scripts": {
+    "build": "bun run build:types && vp exec bun build src/bin/driver.ts --outfile dist/driver.mjs --target bun --format esm --bundle",
+    "build:types": "vp exec tsc -p tsconfig.types.json",
+    "docker:build": "bun run build && docker build -t agent-driver:local .",
+    "lint": "vp lint src tests",
+    "tc": "vp exec tsc --noEmit",
+    "test": "vp exec bun test tests",
+    "test:live:anthropic": "vp exec bun test tests/claude-agent-sdk-live.test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.158",
+    "@anthropic-ai/sdk": "^0.100.1",
+    "@cfworker/json-schema": "^4.1.1",
+    "@modelcontextprotocol/client": "^2.0.0-alpha.2",
+    "@orpc/client": "^1.14.3",
+    "fflate": "^0.8.3",
+    "vestig": "^0.23.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.8.0",
+    "typescript": "^6.0.3",
+    "vite-plus": "^0.1.23"
+  },
+  "packageManager": "bun@1.3.14"
+}

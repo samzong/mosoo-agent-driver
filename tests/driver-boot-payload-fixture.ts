@@ -7,12 +7,12 @@ import { DRIVER_CONTROL_PORT_MIN } from "../src/protocol/boot";
 export const DRIVER_TEST_IDS = {
   agentId: "01J00000000000000000000009",
   callerAccountId: "01J00000000000000000000001",
-  cloudflareSessionId: "01J0000000000000000000000E",
   driverInstanceId: "01J0000000000000000000000F",
   environmentId: "01J00000000000000000000010",
   environmentRevisionId: "01J00000000000000000000011",
   runId: "01J00000000000000000000012",
   sandboxId: "01J0000000000000000000000D",
+  sandboxSessionId: "01J0000000000000000000000E",
   secondRunId: "01J00000000000000000000013",
   sessionId: "01J00000000000000000000008",
   spaceId: "01J00000000000000000000014",
@@ -43,7 +43,6 @@ export const driverBootPayload = {
     session: {
       additionalDirectories: [],
       context: {
-        cloudflareSessionId: DRIVER_TEST_IDS.cloudflareSessionId,
         homePath: "/tmp/home",
         organizationAccessSnapshot: {
           entries: [],
@@ -56,6 +55,7 @@ export const driverBootPayload = {
         },
         sandboxId: DRIVER_TEST_IDS.sandboxId,
         sandboxKind: "cattle",
+        sandboxSessionId: DRIVER_TEST_IDS.sandboxSessionId,
         sandboxSubjectId: DRIVER_TEST_IDS.sessionId,
         sandboxSubjectKind: "session",
         sessionOrganizationPath: "/tmp/organization",

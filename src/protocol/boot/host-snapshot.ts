@@ -36,12 +36,12 @@ export interface DriverSpaceAliasBinding {
 }
 
 export interface DriverExecutionSessionContext {
-  readonly cloudflareSessionId: SandboxSessionId;
   readonly homePath: string;
   readonly organizationAccessSnapshot: DriverOrganizationAccessSnapshotOutput;
   readonly origin: DriverOrigin;
   readonly sandboxId: SandboxId;
   readonly sandboxKind: string;
+  readonly sandboxSessionId: SandboxSessionId;
   readonly sandboxSubjectId: DriverId;
   readonly sandboxSubjectKind: string;
   readonly sessionOrganizationPath: string;
@@ -157,10 +157,6 @@ export function readExecutionSessionContext(value: unknown): DriverExecutionSess
   const record = readRecord(value, "execution.session.context");
 
   return {
-    cloudflareSessionId: parseId(
-      record["cloudflareSessionId"],
-      "Driver execution Cloudflare session ID",
-    ) as SandboxSessionId,
     homePath: readNonEmptyString(record, "homePath", "execution.session.context"),
     organizationAccessSnapshot: readOrganizationAccessSnapshot(
       record["organizationAccessSnapshot"],
@@ -168,6 +164,10 @@ export function readExecutionSessionContext(value: unknown): DriverExecutionSess
     origin: readOrigin(record["origin"]),
     sandboxId: parseId(record["sandboxId"], "Driver execution sandbox ID") as SandboxId,
     sandboxKind: readNonEmptyString(record, "sandboxKind", "execution.session.context"),
+    sandboxSessionId: parseId(
+      record["sandboxSessionId"],
+      "Driver execution sandbox session ID",
+    ) as SandboxSessionId,
     sandboxSubjectId: parseId(record["sandboxSubjectId"], "Driver execution sandbox subject ID"),
     sandboxSubjectKind: readNonEmptyString(
       record,

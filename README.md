@@ -33,6 +33,12 @@ The runtime that drives a sandbox-hosted agent session inside <a href="https://g
 
 CMA (the Anthropic Managed Agents compatibility surface) is layered on top of the Driver Kernel through projections. Provider backends must emit Driver runtime events and consume Driver commands; they must not emit CMA events directly.
 
+<div align="center">
+
+<img src="./assets/architecture.png" alt="agent-driver architecture: Claude Code, Codex, opencode, and Hermes Agent run inside a sandbox and are driven by the Driver Kernel through a runtime-neutral command/event protocol; the host controls the driver via a control port and host ports, with an optional CMA compatibility surface." width="900" />
+
+</div>
+
 ## Why agent-driver
 
 Different model vendors ship different agent runtimes — the Claude Agent SDK, OpenAI's app-server protocol, and ACP-based agents — and each speaks its own event vocabulary. `agent-driver` unifies them at the kernel level so the host integrates **one** protocol instead of three.

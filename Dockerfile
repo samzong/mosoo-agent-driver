@@ -1,6 +1,10 @@
-FROM cloudflare/sandbox:0.10.3
+# Sandbox base image. Defaults to Cloudflare's sandbox (what Mosoo runs on),
+# but the Driver Kernel itself is sandbox-neutral — override at build time with
+# `--build-arg SANDBOX_BASE_IMAGE=...` to run the driver on a different base.
+ARG SANDBOX_BASE_IMAGE=cloudflare/sandbox:0.10.3
+FROM ${SANDBOX_BASE_IMAGE}
 
-# Keep this image version in sync with apps/api/package.json -> @cloudflare/sandbox.
+# Keep the default base image version in sync with apps/api/package.json -> @cloudflare/sandbox.
 ARG CLAUDE_AGENT_SDK_VERSION=0.3.158
 ARG ANTHROPIC_SDK_VERSION=0.100.1
 ARG OPENAI_RUNTIME_VERSION=0.135.0

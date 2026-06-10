@@ -43,6 +43,7 @@ import {
 } from "./generated/app-server-protocol";
 
 interface PendingJsonRpcRequest {
+  method: ClientRequestMethod;
   reject(error: Error): void;
   resolve(value: unknown): void;
 }
@@ -83,6 +84,43 @@ function toPermissionProfileGrant(params: JsonObject): PermissionsRequestApprova
   return {
     permissions: { ...permissions },
     scope: "turn",
+  };
+}
+
+function summarizeJsonRpcErrorData(value: unknown): JsonObject | null {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  if (typeof value === "string") {
+    return {
+      length: value.length,
+      type: "string",
+    };
+  }
+
+  if (typeof value === "number" || typeof value === "boolean") {
+    return {
+      type: typeof value,
+    };
+  }
+
+  if (Array.isArray(value)) {
+    return {
+      length: value.length,
+      type: "array",
+    };
+  }
+
+  if (isRecord(value)) {
+    return {
+      keys: Object.keys(value).sort().slice(0, 12),
+      type: "object",
+    };
+  }
+
+  return {
+    type: typeof value,
   };
 }
 
@@ -206,6 +244,7 @@ export class OpenAiAppServerClient {
     const response = createPromiseDeferred<ClientRequestResult[M]>();
     const parseResult = CLIENT_REQUEST_RESULT_PARSERS[method];
     this.#pendingRequests.set(id, {
+      method,
       reject: response.reject,
       resolve: (value) => {
         response.resolve(parseResult(value));
@@ -338,9 +377,18 @@ export class OpenAiAppServerClient {
     const responseError = readRecord(message, "error");
 
     if (responseError !== null) {
-      pending.reject(
-        new Error(readString(responseError, "message") ?? "OpenAi app-server request failed."),
-      );
+      const errorMessage =
+        readString(responseError, "message") ?? "OpenAi app-server request failed.";
+      const responseCode = responseError["code"];
+      const errorCode =
+        typeof responseCode === "number" || typeof responseCode === "string" ? responseCode : null;
+
+      this.#context.logger.error("driver.openai.client_request.failed", new Error(errorMessage), {
+        data: summarizeJsonRpcErrorData(responseError["data"]),
+        method: pending.method,
+        responseCode: errorCode,
+      });
+      pending.reject(new Error(errorMessage));
       return;
     }
 

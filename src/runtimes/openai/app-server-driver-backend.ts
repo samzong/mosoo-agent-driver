@@ -26,11 +26,22 @@ import { OpenAiAppServerClient } from "./app-server-client";
 import { MOSOO_OPENAI_RUNTIME_SANDBOX_MODE } from "./app-server-env";
 import { OpenAiAppServerEventBridge } from "./app-server-event-bridge";
 import type {
+  ApprovalPolicy,
   ThreadResumeParams,
   ThreadStartParams,
   TurnStatus,
+  TurnStartParams,
   TurnStartResponse,
 } from "./generated/app-server-protocol";
+
+const OPENAI_RUNTIME_APPROVAL_POLICY = "on-request" satisfies ApprovalPolicy;
+
+interface OpenAiTurnStartInput {
+  readonly cwd: string;
+  readonly model: string;
+  readonly text: string;
+  readonly threadId: string;
+}
 
 function readOpenAiNativeResumeThreadId(payload: DriverStartInput): string | null {
   const { nativeResumeRef } = payload.execution.session;
@@ -55,6 +66,22 @@ function readOpenAiNativeResumeThreadId(payload: DriverStartInput): string | nul
 
 function isTerminalOpenAiTurnStatus(status: TurnStatus | undefined): boolean {
   return status === "completed" || status === "failed" || status === "interrupted";
+}
+
+export function createOpenAiTurnStartParams(input: OpenAiTurnStartInput): TurnStartParams {
+  return {
+    approvalPolicy: OPENAI_RUNTIME_APPROVAL_POLICY,
+    cwd: input.cwd,
+    input: [
+      {
+        text: input.text,
+        text_elements: [],
+        type: "text",
+      },
+    ],
+    model: input.model,
+    threadId: input.threadId,
+  };
 }
 
 async function interruptOpenAiTurn(input: {
@@ -150,7 +177,7 @@ export class OpenAiAppServerDriverBackend implements AgentDriverBackend {
     const developerInstructions = buildNativeRuntimeSystemPrompt(this.#payload.execution);
     const nativeResumeThreadId = readOpenAiNativeResumeThreadId(this.#payload);
     const baseThreadParams = {
-      approvalPolicy: "on-request",
+      approvalPolicy: OPENAI_RUNTIME_APPROVAL_POLICY,
       cwd: this.#payload.execution.session.cwd,
       model: this.#payload.execution.model,
       modelProvider: this.#payload.execution.provider,
@@ -244,17 +271,15 @@ export class OpenAiAppServerDriverBackend implements AgentDriverBackend {
     const turnStartRequestedAtMs = Date.now();
 
     try {
-      turnResult = await client.request("turn/start", {
-        cwd: this.#payload.execution.session.cwd,
-        input: [
-          {
-            text: input.text,
-            type: "text",
-            text_elements: [],
-          },
-        ],
-        threadId,
-      });
+      turnResult = await client.request(
+        "turn/start",
+        createOpenAiTurnStartParams({
+          cwd: this.#payload.execution.session.cwd,
+          model: this.#payload.execution.model,
+          text: input.text,
+          threadId,
+        }),
+      );
     } catch (error) {
       const pendingCancellationReason = this.#pendingTurnStartCancellationReason;
       this.#pendingTurnStartCancellationReason = null;

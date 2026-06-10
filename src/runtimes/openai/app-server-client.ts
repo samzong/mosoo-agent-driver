@@ -114,7 +114,7 @@ function summarizeJsonRpcErrorData(value: unknown): JsonObject | null {
 
   if (isRecord(value)) {
     return {
-      keys: Object.keys(value).sort().slice(0, 12),
+      keys: Object.keys(value).toSorted().slice(0, 12),
       type: "object",
     };
   }

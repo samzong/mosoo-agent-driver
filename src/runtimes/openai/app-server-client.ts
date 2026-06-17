@@ -128,6 +128,11 @@ function summarizeJsonRpcErrorData(value: unknown): JsonObject | null {
 const OPENAI_RUNTIME_HOME_ENV_NAME = ["CODE", "X_HOME"].join("");
 const DEFAULT_OPENAI_RUNTIME_EXECUTABLE = ["co", "dex"].join("");
 
+function readOpenAiRuntimeExecutable(): string {
+  const executable = process.env["MOSOO_OPENAI_RUNTIME_EXECUTABLE"]?.trim();
+  return executable && executable.length > 0 ? executable : DEFAULT_OPENAI_RUNTIME_EXECUTABLE;
+}
+
 export class OpenAiAppServerClient {
   readonly #context: OpenAiClientContext;
   readonly #pendingRequests = new Map<RequestId, PendingJsonRpcRequest>();
@@ -197,8 +202,7 @@ export class OpenAiAppServerClient {
     });
 
     await measure("app_server.spawn", async () => {
-      const executable =
-        process.env["MOSOO_OPENAI_RUNTIME_EXECUTABLE"] ?? DEFAULT_OPENAI_RUNTIME_EXECUTABLE;
+      const executable = readOpenAiRuntimeExecutable();
       const child = spawn(executable, ["app-server"], {
         cwd: this.#payload.execution.session.cwd,
         env,

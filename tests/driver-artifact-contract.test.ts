@@ -175,6 +175,11 @@ describe("driver artifact contract", () => {
     expect(dockerfile).toContain("COPY dist/driver.mjs /usr/local/bin/agent-driver");
     expect(dockerfile).toContain("RUN chmod +x /usr/local/bin/agent-driver");
     expect(dockerfile).toContain("EXPOSE 20000-59999");
+    expect(dockerfile).toContain("ARG OPENCODE_VERSION=1.17.7");
+    expect(dockerfile).toContain("opencode-ai@${OPENCODE_VERSION}");
+    expect(dockerfile).toContain("opencode acp --help");
+    expect(dockerfile).toContain("ENV MOSOO_ACP_FALLBACK_COMMAND=opencode");
+    expect(dockerfile).toContain('ENV MOSOO_ACP_FALLBACK_ARGS=[\\"acp\\",\\"--pure\\"]');
     expect(dockerignore).toContain("!dist/driver.mjs");
     expect(dockerBuildScript).toBe("bun run build && docker build -t agent-driver:local .");
     expect(buildScript).not.toContain("vp run");

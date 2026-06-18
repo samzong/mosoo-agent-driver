@@ -25,6 +25,9 @@ live-anthropic:
 live-openai:
     bun run test:live:openai
 
+live-opencode:
+    bun run test:live:opencode
+
 clean:
     fd -u -t d -F node_modules . -X rm -rf
     fd -u -t d -F dist . -X rm -rf

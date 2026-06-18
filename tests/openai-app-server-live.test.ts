@@ -17,7 +17,10 @@ const LIVE_TURN_TIMEOUT_MS = 120_000;
 
 const tempRoots: string[] = [];
 
-function logLiveStatus(message: string, details: Record<string, string | number | boolean> = {}): void {
+function logLiveStatus(
+  message: string,
+  details: Record<string, string | number | boolean> = {},
+): void {
   const suffix =
     Object.keys(details).length === 0
       ? ""

@@ -8,7 +8,6 @@ import { DRIVER_TEST_IDS, driverBootPayload } from "./driver-boot-payload-fixtur
 import {
   FakeDriverRuntimeIo,
   accessSnapshot,
-  bootPayload,
   createBackend,
   createDispatcher,
   waitForUpdate,
@@ -167,7 +166,7 @@ describe("driver runtime boundary", () => {
         runId: DRIVER_TEST_IDS.secondRunId,
       },
     ]);
-    const { accessRefreshes, commandReads, dispatcher, logger } = createDispatcher({
+    const { commandReads, dispatcher, logger } = createDispatcher({
       backend,
       isShuttingDown: () => socket.isDrained(),
       runtimeState,

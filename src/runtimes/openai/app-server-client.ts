@@ -23,7 +23,6 @@ import {
   materializeOpenAiApiKeyAuthState,
   materializeOpenAiModelProviderConfig,
 } from "./auth-state";
-import { buildOpenAiMcpServerConfig } from "./mcp-config";
 import type {
   ClientRequestMethod,
   ClientRequestParams,
@@ -42,6 +41,7 @@ import {
   isServerRequestMethod,
   parseServerNotificationParams,
 } from "./generated/app-server-protocol";
+import { buildOpenAiMcpServerConfig } from "./mcp-config";
 
 interface PendingJsonRpcRequest {
   method: ClientRequestMethod;

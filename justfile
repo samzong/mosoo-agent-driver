@@ -16,6 +16,11 @@ test: lint
 build: test
     bun run build
 
+ci: lint
+    bun run tc
+    bun run test
+    bun run build
+
 docker-build:
     bun run docker:build
 
